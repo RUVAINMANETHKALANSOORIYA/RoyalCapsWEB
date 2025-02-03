@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\DeliveryDetail;
 use App\Models\Customization; // ✅ Import Customization Model
 use App\Models\Order;
+use App\Models\Product; // ✅ Import Product Model
 
 class AdminDashboardController extends Controller
 {
@@ -18,17 +19,22 @@ class AdminDashboardController extends Controller
         // Get all admins
         $admins = User::where('role', 'admin')->get();
         
-        $customizations = Customization::all(); // ✅ Fetch all customizations
+        // Fetch customizations
+        $customizations = Customization::all();
 
-        $orders = Order::all(); // ✅ Fetch all orders
-
+        // Fetch all orders
+        $orders = Order::all();
 
         // Get all regular users
         $users = User::where('role', 'user')->get();
 
-        // Get all delivery details
-        $deliveryDetails = DeliveryDetail::all(); 
+        // ✅ Fetch all delivery details from the database
+        $deliveryDetails = DeliveryDetail::all();
 
-        return view('admin.dashboard', compact('admins', 'users', 'deliveryDetails', 'customizations', 'orders')); // ✅ Pass customizations and orders to the view
+        $products = Product::all();
+
+        // ✅ Pass deliveryDetails to the admin dashboard view
+        return view('admin.dashboard', compact('admins', 'users', 'deliveryDetails', 'customizations', 'orders', 'products'));
     }
 }
+

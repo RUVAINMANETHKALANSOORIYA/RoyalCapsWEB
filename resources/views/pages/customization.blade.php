@@ -107,6 +107,7 @@
 </section>
 
 <hr class="border-t-2 border-gray-300 my-0">
-@include('layouts.footer')
 </body>
+@include('layouts.footer')
+
 </html>

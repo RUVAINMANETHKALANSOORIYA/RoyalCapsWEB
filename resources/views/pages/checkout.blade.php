@@ -69,7 +69,7 @@
         Cash on Delivery
     </a>
     
-    <a href="{{ route('payment') }}" 
+    <a href="{{ route('index') }}" 
        class="w-1/2 bg-blue-600 text-white text-center py-2 rounded-lg shadow-md hover:bg-blue-700 mx-1">
         Card Payment
     </a>
@@ -81,7 +81,8 @@
     
 </div>
 
-@include('layouts.footer')
 
 </body>
+@include('layouts.footer')
+
 </html>

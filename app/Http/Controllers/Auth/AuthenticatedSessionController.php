@@ -26,13 +26,27 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        $request->session()->regenerate();
+        $user = Auth::user();
 
-        if($request->user()->role === 'admin') {
-            return redirect('admin/dashboard');
+        $token = $user->createToken($user->email);
+
+        // Store token in session if session is available
+        if ($request->hasSession()) {
+            $request->session()->put('auth_token', $token->plainTextToken);
+            $request->session()->regenerate();
         }
 
-        return redirect()->intended(route('dashboard'));
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Successfully logged in',
+                'user' => $user,
+                'token' => $token->plainTextToken,
+                'token_type' => 'Bearer'
+            ], 200);
+        }
+
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -40,12 +54,32 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        Auth::user()->tokens()->delete();
 
-        $request->session()->invalidate();
+        if ($request->hasSession()) {
+            // Clear the session token
+            $request->session()->forget('auth_token');
 
-        $request->session()->regenerateToken();
+            // Invalidate session
+            $request->session()->invalidate();
 
-        return redirect('/');
+            // Regenerate CSRF token
+            $request->session()->regenerateToken();
+        }
+
+         // Logout user
+         Auth::guard('web')->logout();
+
+         $response = [
+             'status' => true,
+             'message' => 'Logged out successfully'
+         ];
+ 
+         if ($request->expectsJson()) {
+             return new JsonResponse($response, 200);
+         }
+ 
+         return redirect('/')->with('status', 'Logged out successfully');
+
     }
 }

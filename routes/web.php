@@ -91,6 +91,7 @@ Route::get('/customization', function () {
 
 Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
     
+
 // Route::get('/products', [ProductController::class, 'view'])->name('products');
 
 
@@ -161,7 +162,7 @@ Route::post('/delivery-details/store', [DeliveryDetailsController::class, 'store
 Route::get('/admin/delivery-details', [DeliveryDetailsController::class, 'index'])->middleware('auth')->name('admin.delivery_details');
 Route::patch('/delivery-details/update/{id}', [DeliveryDetailsController::class, 'updateStatus'])->middleware('auth')->name('delivery_details.update');
 
-Route::get('admin.dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+// Route::get('admin.dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 Route::patch('/admin/delivery/update/{id}', [DeliveryDetailsController::class, 'update'])->name('admin.delivery.update');
 
 Route::post('/delivery-details/store', [DeliveryDetailsController::class, 'store'])->name('delivery_details.store');
@@ -172,10 +173,13 @@ Route::post('/admin/products/store', [ProductController::class, 'store'])->name(
 Route::post('/admin/products/store', [ProductController::class, 'store'])->name('products.store');
 
 //checkout routes
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::get('/payment', [CheckoutController::class, 'index'])->name('checkout');
 Route::get('/payment', function() {
     return view('pages.payment');
 })->name('payment');
+
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+    ->name('admin.dashboard');
 
 //cash on delivery routes
 Route::get('/cash-on-delivery', function() {
@@ -191,7 +195,7 @@ Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.
 Route::get('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 
-//chekout process
+// //chekout process
 // Route::post('/checkout/process', [CheckoutController::class, 'processCheckout'])->name('checkout.process');
 // Route::get('/order-confirmation', function () {
 //     return view('pages.orderconfirm');
@@ -201,6 +205,29 @@ Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 
 Route::get('/dashboard', [UserDashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 
+// Route::get('/', [StripeController::class, 'index'])->name('index');
+Route::get('/payment-blade', [StripeController::class, 'index'])->name('index');
+Route::post('/checkout', [StripeController::class, 'checkout'])->name('payment.details');
+Route::get('/success', [StripeController::class, 'success'])->name('success');
+
+
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+    ->name('admin.dashboard');
+
+    // ✅ Product Routes for Edit & Delete
+Route::patch('/admin/products/{id}', [ProductController::class, 'update'])->name('admin.products.update');
+Route::delete('/admin/products/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+
+
+
+
+// Update Product
+Route::put('/admin/products/{id}', [ProductController::class, 'update'])
+    ->name('admin.products.update');
+
+// Delete Product
+Route::delete('/admin/products/{id}', [ProductController::class, 'destroy'])
+    ->name('admin.products.destroy');
 
 Route::get('/order-confirm', function () {
     return view('pages.orderconfirm');

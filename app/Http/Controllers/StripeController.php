@@ -6,14 +6,42 @@ use Illuminate\Http\Request;
 
 class StripeController extends Controller
 {
-    public function session(Request $request)
+    public function index()
     {
-        \Stripe\Stripe::setApiKey(config('stripe.sk'));
-
+        return view('index');  
     }
 
     public function checkout()
     {
-        return view('checkout');
+        Stripe::setAptKey(config(stripe.sk));
+
+        $session = \Stripe\checkout\Session::create([
+            'line_items' => [
+                [
+
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'product_data' => [
+                            'name' => 'Send me money!!!',
+                        ],
+                        'unit_amount' => 500,
+                    ],
+                    'quantity' => 1,
+                ],
+            ],
+            'mode'=> 'payment',
+            'success_url' => route('success'),
+            'cancel_url' => route('index'),
+
+        ]);
+
+        return redirect()->away($session->url);
     }
+
+    public function sucess()
+    {
+        return view('success');
+    }
+
+
 }

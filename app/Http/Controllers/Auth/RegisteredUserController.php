@@ -45,6 +45,24 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        $token = $user->createToken($request->email);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status' => true,
+                'message' => 'User registered successfully',
+                'token' => $token->plainTextToken,
+                'user' => $user
+            ], 200);
+        }
+
+        return redirect()->route('dashboard')->with([
+            'status' => true,
+            'message' => 'User registered successfully',
+            'token' => $token->plainTextToken,
+            'user' => $user
+        ]);
+
+        // return redirect(route('dashboard', absolute: false));
     }
 }

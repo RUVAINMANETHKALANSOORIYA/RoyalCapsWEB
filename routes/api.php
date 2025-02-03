@@ -15,6 +15,12 @@ use App\Http\Controllers\Api\AuthController;
 Route::post('/register', [AuthController::class, 'register'])->name('api.register');
 Route::post('/login', [AuthController::class, 'login'])->name('api.login');
 
+Route::middleware('auth:sanctum')->group(function () {
+    // API Authenticated Routes
+    // Route::get('/profile', [AuthController::class, 'profile'])->name('api.profile'); // Named 'api.profile'
+    Route::post('/logout', [AuthController::class, 'logout'])->name('api.logout');
+});
+
 // Example route to fetch authenticated user
 Route::get('/user', function (Request $request) {
     return $request->user();

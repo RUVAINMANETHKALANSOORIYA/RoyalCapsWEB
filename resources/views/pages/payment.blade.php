@@ -3,7 +3,7 @@
 <body class="bg-gray-100 text-gray-800">
 @include('layouts.navigation')
 
-<div class="max-w-3xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+<div class="max-w-3xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md mb-6">
     <h1 class="text-3xl font-bold text-center mb-6">Card Payment</h1>
 
     <p class="text-center text-gray-600 mb-6">Enter your card details to complete the payment.</p>
@@ -37,7 +37,8 @@
     </form>
 </div>
 
-@include('layouts.footer')
 
 </body>
+@include('layouts.footer')
+
 </html>

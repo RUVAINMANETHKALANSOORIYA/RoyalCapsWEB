@@ -28,7 +28,7 @@ class AuthController extends Controller
         ]);
 
         if ($user) {
-            $token = $user->createToken($user->email . '-auth-token')->plainTextToken;
+            $token = $user->createToken($user->email)->plainTextToken;
 
             return response()->json([
                 'message' => 'Registration successful',

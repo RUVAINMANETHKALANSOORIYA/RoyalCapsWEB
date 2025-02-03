@@ -101,7 +101,8 @@
     });
 </script>
 
+</body>
+
 @include('layouts.footer')
 
-</body>
 </html>

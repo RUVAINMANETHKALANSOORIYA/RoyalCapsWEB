@@ -294,6 +294,136 @@
     
     </div>
 
+    <!-- Products List Section -->
+<div class="bg-white rounded shadow p-6 mb-8 max-w-7xl mx-auto mt-11 mb-14">
+    <h3 class="text-2xl font-semibold mb-4 text-center">Manage Products</h3>
+
+    @if(isset($products) && !$products->isEmpty())
+    <div class="overflow-x-auto">
+        <table class="table-auto w-full border-collapse border border-gray-300 rounded-lg shadow-lg">
+            <thead>
+                <tr class="bg-gray-200 text-gray-700">
+                    <th class="border border-gray-300 px-4 py-2">ID</th>
+                    <th class="border border-gray-300 px-4 py-2">Product Name</th>
+                    <th class="border border-gray-300 px-4 py-2">Category</th>
+                    <th class="border border-gray-300 px-4 py-2">Price (LKR)</th>
+                    <th class="border border-gray-300 px-4 py-2">Stock</th>
+                    <th class="border border-gray-300 px-4 py-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($products as $product)
+                <tr class="hover:bg-gray-100">
+                    <td class="border border-gray-300 px-4 py-2 text-center">{{ $product->id }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $product->name }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $product->category }}</td>
+                    <td class="border border-gray-300 px-4 py-2">LKR {{ number_format($product->price, 2) }}</td>
+                    <td class="border border-gray-300 px-4 py-2 text-center">{{ $product->stock }}</td>
+                    <td class="border border-gray-300 px-4 py-2 text-center flex justify-center gap-2">
+                        <!-- Edit Button -->
+                        <button onclick="openEditModal({{ json_encode($product) }})"
+                                class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                            Edit
+                        </button>
+
+                        <!-- Delete Form -->
+                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                              onsubmit="return confirm('Are you sure you want to delete this product?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+@else
+    <p class="text-center text-gray-500">No products available.</p>
+@endif
+
+</div>
+
+<!-- Edit Product Modal -->
+<div id="editProductModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-xl font-semibold mb-4">Edit Product</h2>
+        
+        <form id="editProductForm" action="" method="POST">
+            @csrf
+            @method('PATCH')
+
+            <!-- Product Name -->
+            <div class="mb-4">
+                <label for="edit_name" class="block text-gray-700 font-semibold">Product Name</label>
+                <input type="text" name="name" id="edit_name"
+                       class="w-full border border-gray-300 rounded-lg shadow-sm p-2" required>
+            </div>
+
+            <!-- Product Price -->
+            <div class="mb-4">
+                <label for="edit_price" class="block text-gray-700 font-semibold">Price (LKR)</label>
+                <input type="number" name="price" id="edit_price" step="0.01"
+                       class="w-full border border-gray-300 rounded-lg shadow-sm p-2" required>
+            </div>
+
+            <!-- Stock -->
+            <div class="mb-4">
+                <label for="edit_stock" class="block text-gray-700 font-semibold">Stock Quantity</label>
+                <input type="number" name="stock" id="edit_stock" min="0"
+                       class="w-full border border-gray-300 rounded-lg shadow-sm p-2" required>
+            </div>
+
+            <!-- Category Selection -->
+            <div class="mb-4">
+                <label for="edit_category" class="block text-gray-700 font-semibold">Category</label>
+                <select name="category" id="edit_category"
+                        class="w-full border border-gray-300 rounded-lg shadow-sm p-2" required>
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-between">
+                <button type="button" onclick="closeEditModal()"
+                        class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+                    Cancel
+                </button>
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Update
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript to Handle Modal -->
+<script>
+    function openEditModal(product) {
+        document.getElementById('edit_name').value = product.name;
+        document.getElementById('edit_price').value = product.price;
+        document.getElementById('edit_stock').value = product.stock;
+        document.getElementById('edit_category').value = product.category; // Set category value
+
+
+        // Set the form action dynamically
+        document.getElementById('editProductForm').action = `/admin/products/${product.id}`;
+
+        document.getElementById('editProductModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+        document.getElementById('editProductModal').classList.add('hidden');
+    }
+</script>
+
+
+
+
    
 
 
