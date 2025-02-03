@@ -40,4 +40,20 @@ class CustomizationController extends Controller
         return redirect()->route('customization.form')->with('success', 'Customization request submitted successfully!');
     }
 
+    public function accept($id)
+    {
+        $customization = Customization::findOrFail($id);
+        $customization->update(['status' => 'Accepted']);
+
+        return redirect()->back()->with('success', 'Customization Accepted!');
+    }
+
+    public function reject($id)
+    {
+        $customization = Customization::findOrFail($id);
+        $customization->update(['status' => 'Rejected']);
+
+        return redirect()->back()->with('error', 'Customization Rejected!');
+    }
+
 }

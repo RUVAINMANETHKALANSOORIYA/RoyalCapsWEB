@@ -17,10 +17,11 @@
     <!-- Hero Content -->
     <div class="absolute inset-0 flex flex-col justify-center items-center text-center text-white bg-gradient-to-b from-black/40 to-black/70">
         <h1 class="text-5xl font-bold mb-6 tracking-tight animate-fade-in">
-            Welcome to our store.
+            Exlussive Products
         </h1>
-        Discover the finest collection of royal caps.Each piece is crafted with <br> precision and elegance, 
-        reflecting the rich heritage and timeless style. <br> Start your journey to find the perfect cap today.
+        <p class="text-lg mb-6">
+            Discover the finest collection of royal caps. <br>Each piece is crafted with precision and elegance, 
+            reflecting <br>the rich heritage and timeless style. Start your journey to find the perfect cap today.
         </p>
         <a href="/products" class="mt-8 px-8 py-3 bg-white text-black rounded-full hover:bg-opacity-90 transition-all duration-300 font-semibold animate-bounce">
             Explore Now

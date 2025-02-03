@@ -1,3 +1,4 @@
+
 @include('layouts.navigation')
 <x-app-layout>
     <x-slot name="header">
@@ -27,6 +28,12 @@
             }
         }, 3000); // 4000ms = 4 seconds
     </script>
+
+        @if(isset($deliveryDetails))
+        @include('admin.delivery_details', ['deliveryDetails' => $deliveryDetails])
+        @else
+        <p class="text-center text-gray-500 ">No delivery details available.</p>
+        @endif
 
     
     <!-- Admin List -->
@@ -98,8 +105,7 @@
         @endif
     </div>
     
-    <!-- Customizations List -->
-    <div class="bg-white rounded shadow p-6 mb-8 max-w-6xl mx-auto">
+    <div class="bg-white rounded shadow p-6 mb-8 max-w-7xl mx-auto">
         <h3 class="text-2xl font-semibold mb-4 text-center">Customizations List</h3>
         @if($customizations->isEmpty())
             <p class="text-center text-gray-500">No customizations available.</p>
@@ -116,6 +122,8 @@
                             <th class="border border-gray-300 px-4 py-2">Style</th>
                             <th class="border border-gray-300 px-4 py-2">Color</th>
                             <th class="border border-gray-300 px-4 py-2">Category</th>
+                            <th class="border border-gray-300 px-4 py-2">Status</th>
+                            <th class="border border-gray-300 px-4 py-2">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -129,6 +137,76 @@
                             <td class="border border-gray-300 px-4 py-2 text-center">{{ $customization->style }}</td>
                             <td class="border border-gray-300 px-4 py-2 text-center">{{ $customization->color }}</td>
                             <td class="border border-gray-300 px-4 py-2 text-center">{{ $customization->category }}</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                <span class="px-3 py-1 text-white rounded-lg
+                                    {{ $customization->status == 'Accepted' ? 'bg-green-500' : ($customization->status == 'Rejected' ? 'bg-red-500' : 'bg-yellow-500') }}">
+                                    {{ $customization->status }}
+                                </span>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                @if ($customization->status == 'Pending')
+                                    <form action="{{ route('admin.customizations.accept', $customization->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        <button type="submit" class="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700">Accept</button>
+                                    </form>
+    
+                                    <form action="{{ route('admin.customizations.reject', $customization->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        <button type="submit" class="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700">Reject</button>
+                                    </form>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </div>
+
+    <!-- Orders List -->
+    <div class="bg-white rounded shadow p-6 mb-8 max-w-6xl mx-auto">
+        <h3 class="text-2xl font-semibold mb-4 text-center">Orders List</h3>
+        @if($orders->isEmpty())
+            <p class="text-center text-gray-500">No orders available.</p>
+        @else
+            <div class="overflow-x-auto">
+                <table class="table-auto w-full border-collapse border border-gray-300 rounded-lg shadow-lg">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-700">
+                            <th class="border border-gray-300 px-4 py-2">Order ID</th>
+                            <th class="border border-gray-300 px-4 py-2">Customer</th>
+                            <th class="border border-gray-300 px-4 py-2">Phone</th>
+                            <th class="border border-gray-300 px-4 py-2">Delivery Address</th>
+                            <th class="border border-gray-300 px-4 py-2">Status</th>
+                            <th class="border border-gray-300 px-4 py-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($orders as $order)
+                        <tr class="hover:bg-gray-100">
+                            <td class="border border-gray-300 px-4 py-2 text-center">{{ $order->id }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $order->user->name }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $order->phone }}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{ $order->delivery_address }}</td>
+                            <td class="border border-gray-300 px-4 py-2 text-center font-semibold 
+                            @if($order->status == 'Pending') text-yellow-500 
+                            @elseif($order->status == 'Accepted') text-green-500 
+                            @else text-red-500 
+                            @endif">
+                                {{ $order->status }}
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                <form action="{{ route('orders.update', $order->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <select name="status" onchange="this.form.submit()" class="border border-gray-300 rounded p-1">
+                                        <option value="Pending" {{ $order->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="Accepted" {{ $order->status == 'Accepted' ? 'selected' : '' }}>Accept</option>
+                                        <option value="Rejected" {{ $order->status == 'Rejected' ? 'selected' : '' }}>Reject</option>
+                                    </select>
+                                </form>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -137,8 +215,9 @@
         @endif
     </div>
     
+    
     <!-- Product Form -->
-    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 mt-6">
         <h2 class="text-2xl font-semibold mb-6 text-center">Add New Product</h2>
     
         <form action="{{ route('products.store') }}" method="POST">
@@ -214,8 +293,10 @@
     @endif
     
     </div>
-    <hr class="border-t-2 border-gray-300 my-0 mb-6 mt-6">
-    
+
+   
+
+
     @include('layouts.footer')
 
 </x-app-layout>

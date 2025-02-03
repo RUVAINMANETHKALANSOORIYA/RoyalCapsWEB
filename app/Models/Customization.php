@@ -21,5 +21,6 @@ class Customization extends Model
         'color',
         'category',
         'notes',
+        'status',
     ];
 }

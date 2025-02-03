@@ -26,7 +26,7 @@
                  src="{{ asset('images/customize1.jpg') }}" alt="Slideshow Image 1">
             <img class="slide h-full w-full object-cover absolute transition-opacity duration-1000" 
                  :class="{ 'opacity-100': currentSlide === 1, 'opacity-0': currentSlide !== 1 }" 
-                 src="{{ asset('images/customize2.webp') }}" alt="Slideshow Image 2">
+                 src="{{ asset('images/customize2.jpg') }}" alt="Slideshow Image 2">
             <img class="slide h-full w-full object-cover absolute transition-opacity duration-1000" 
                  :class="{ 'opacity-100': currentSlide === 2, 'opacity-0': currentSlide !== 2 }" 
                  src="{{ asset('images/customize3.jpg') }}" alt="Slideshow Image 3">
@@ -40,7 +40,7 @@
         </h1>
         <p class="text-lg mb-6">Design your own cap with our customization tool. <br>Choose from a variety of styles, colors, and <br>embroidery options to create a cap that's uniquely yours.
         </p>
-        <a href="#explore" class="mt-8 px-8 py-3 bg-white text-black rounded-full hover:bg-opacity-90 transition-all duration-300 font-semibold animate-bounce">
+        <a href="/products" class="mt-8 px-8 py-3 bg-white text-black rounded-full hover:bg-opacity-90 transition-all duration-300 font-semibold animate-bounce">
             Explore Now
         </a>
     </div>
@@ -103,14 +103,10 @@
         </a>
         
     </div>
+    
 </section>
 
 <hr class="border-t-2 border-gray-300 my-0">
-
-
 @include('layouts.footer')
-
-
-
 </body>
 </html>
