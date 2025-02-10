@@ -29,6 +29,16 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
 
         $token = $user->createToken($user->email);
+        
+        if ($request->user()->role == 'admin')
+        {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('dashboard');
+
+
+
 
         // Store token in session if session is available
         if ($request->hasSession()) {
@@ -46,7 +56,8 @@ class AuthenticatedSessionController extends Controller
             ], 200);
         }
 
-        return redirect()->route('dashboard');
+
+
     }
 
     /**

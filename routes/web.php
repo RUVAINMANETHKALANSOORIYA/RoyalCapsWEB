@@ -16,6 +16,9 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\DeliveryDetailsController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AuthenticatedSessionController;
+
+
 
 
 Route::get('/welcome', function () {
@@ -92,7 +95,7 @@ Route::get('/customization', function () {
 Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
     
 
-// Route::get('/products', [ProductController::class, 'view'])->name('products');
+Route::get('/products', [ProductController::class, 'view'])->name('products');
 
 
 Route::post('/customization/submit', function (\Illuminate\Http\Request $request) {
@@ -170,7 +173,7 @@ Route::post('/delivery-details/store', [DeliveryDetailsController::class, 'store
 Route::get('/admin/delivery-details', [DeliveryDetailsController::class, 'index'])->middleware('auth')->name('admin.delivery_details');
 
 Route::post('/admin/products/store', [ProductController::class, 'store'])->name('products.store');
-Route::post('/admin/products/store', [ProductController::class, 'store'])->name('products.store');
+// Route::post('/admin/products/store', [ProductController::class, 'store'])->name('products.store');
 
 //checkout routes
 Route::get('/payment', [CheckoutController::class, 'index'])->name('checkout');
@@ -178,8 +181,8 @@ Route::get('/payment', function() {
     return view('pages.payment');
 })->name('payment');
 
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
-    ->name('admin.dashboard');
+// Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+//     ->name('admin.dashboard');
 
 //cash on delivery routes
 Route::get('/cash-on-delivery', function() {
@@ -211,8 +214,11 @@ Route::post('/checkout', [StripeController::class, 'checkout'])->name('payment.d
 Route::get('/success', [StripeController::class, 'success'])->name('success');
 
 
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
-    ->name('admin.dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+        ->name('admin.dashboard');
+});
+
 
     // ✅ Product Routes for Edit & Delete
 Route::patch('/admin/products/{id}', [ProductController::class, 'update'])->name('admin.products.update');

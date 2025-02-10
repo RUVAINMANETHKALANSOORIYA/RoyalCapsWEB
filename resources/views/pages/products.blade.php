@@ -64,9 +64,9 @@
                         @php $images = json_decode($product->product_images, true); @endphp
                         @if (!empty($images))
                             <a href="{{ route('product.show', $product->id) }}">
-                                <img src="{{ asset('images/products/' . $images[0]) }}" 
-                                     alt="{{ $product->name }}" 
-                                     class="w-full h-40 object-cover hover:opacity-80 transition duration-300">
+                                <img src="{{ asset('uploads/' . json_decode($product->product_images)[0]) }}" 
+                                alt="Product Image" 
+                                class="w-16 h-16 object-cover rounded">
                             </a>
                         @endif
                     @endif

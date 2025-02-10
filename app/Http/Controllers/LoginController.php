@@ -31,11 +31,11 @@ class LoginController extends Controller
 
             // ✅ Redirect admins to the dashboard
             if ($user->role === 'admin') {
-                return redirect()->route('dashboard');
+                return redirect()->route('admin.dashboard');
             }
 
             // ✅ Redirect regular users to home
-            return redirect()->route('home');
+            return redirect()->route('dashboard');
         }
 
         // If login fails, return error message

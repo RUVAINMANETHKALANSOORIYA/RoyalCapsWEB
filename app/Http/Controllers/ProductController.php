@@ -8,6 +8,7 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
+
     /**
      * Display all products categorized under 'Men' and 'Women'.
      */
@@ -34,7 +35,7 @@ class ProductController extends Controller
             'stock' => 'required|integer|min:0',
             'category' => 'required|in:Men,Women',
             'color' => 'required|string|max:50', 
-            'product_images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate multiple images
+            'product_image.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validate multiple images
         ]);
 
         // Handle Multiple Image Uploads
@@ -42,7 +43,7 @@ class ProductController extends Controller
         if ($request->hasFile('product_images')) {
             foreach ($request->file('product_images') as $image) {
                 $imageName = time() . '-' . $image->getClientOriginalName();
-                $image->move(public_path('images/products'), $imageName);
+                $image->move(public_path('uploads'), $imageName);
                 $imageNames[] = $imageName;
             }
         }
@@ -55,7 +56,7 @@ class ProductController extends Controller
             'stock' => $request->stock,
             'category' => $request->category,
             'color' => $request->color,
-            'product_images' => json_encode($imageNames), // Store images as JSON
+            'product_image' => json_encode($imageNames), // Store images as JSON
             'user_id' => Auth::id(),
         ]);
 

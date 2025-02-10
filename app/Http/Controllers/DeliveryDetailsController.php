@@ -82,17 +82,22 @@ class DeliveryDetailsController extends Controller
      */
     
 
-    public function update(Request $request, $id)
-{
-    $request->validate([
-        'status' => 'required|in:Pending,Accepted,Rejected',
-    ]);
-
-    $delivery = DeliveryDetail::findOrFail($id); // ✅ Correct Model Name
-    $delivery->update(['status' => $request->status]);
-
-    return redirect()->route('admin.dashboard')->with('success', 'Delivery status updated successfully.');
-}
+     public function update(Request $request, $id)
+     {
+         $request->validate([
+             'status' => 'required|in:Pending,Accepted,Rejected',
+         ]);
+     
+         $delivery = DeliveryDetail::findOrFail($id);
+         
+         // Ensure 'status' is stored as a string
+         $delivery->update([
+             'status' => (string) $request->status
+         ]);
+     
+         return redirect()->route('admin.dashboard')->with('success', 'Delivery status updated successfully.');
+     }
+     
 
 
     

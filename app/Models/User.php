@@ -47,4 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    //i added this beacuse of mad 
+    public function generateToken()
+    {
+        return $this->createToken($this->email . '-auth-token')->plainTextToken;
+    }
 }

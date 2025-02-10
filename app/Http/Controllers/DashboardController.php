@@ -38,11 +38,11 @@ class DashboardController extends Controller
         $user = User::find($id);
 
         if (!$user) {
-            return redirect()->route('dashboard')->with('error', 'User not found.');
+            return redirect()->route('admin.dashboard')->with('error', 'User not found.');
         }
 
         $user->delete();
 
-        return redirect()->route('dashboard')->with('success', 'User deleted successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'User deleted successfully.');
     }
 }

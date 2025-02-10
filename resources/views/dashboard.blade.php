@@ -28,31 +28,26 @@
     </script>
 
     <!-- Delivery Details Section -->
-    <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-6 mt-11 mb-11">
-        <h2 class="text-2xl font-semibold mb-4 text-center">Your Delivery Details</h2>
+<div class="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-6 mt-11 mb-11">
+    <h2 class="text-2xl font-semibold mb-4 text-center">Your Delivery Details</h2>
 
-        @if(isset($deliveryDetails) && !$deliveryDetails->isEmpty())
-            @include('admin.delivery_details', ['deliveryDetails' => $deliveryDetails])
-        @else
-            <p class="text-center text-gray-500">No delivery details available.</p>
-
-
-            <div class="overflow-x-auto">
-                <table class="table-auto w-full border-collapse border border-gray-300 rounded-lg shadow-lg">
-                    <thead>
-                        <tr class="bg-gray-200 text-gray-700">
-                            <th class="border border-gray-300 px-4 py-2">Delivery ID</th>
-                            <th class="border border-gray-300 px-4 py-2">Name</th>
-                            <th class="border border-gray-300 px-4 py-2">Email</th>
-                            <th class="border border-gray-300 px-4 py-2">Phone</th>
-                            <th class="border border-gray-300 px-4 py-2">City</th>
-                            <th class="border border-gray-300 px-4 py-2">Postal Code</th>
-                            <th class="border border-gray-300 px-4 py-2">Address</th>
-                            <th class="border border-gray-300 px-4 py-2">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($deliveryDetails as $delivery)
+    @if(isset($deliveryDetails) && !$deliveryDetails->isEmpty())
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full border-collapse border border-gray-300 rounded-lg shadow-lg">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-700">
+                        <th class="border border-gray-300 px-4 py-2">Delivery ID</th>
+                        <th class="border border-gray-300 px-4 py-2">Name</th>
+                        <th class="border border-gray-300 px-4 py-2">Email</th>
+                        <th class="border border-gray-300 px-4 py-2">Phone</th>
+                        <th class="border border-gray-300 px-4 py-2">City</th>
+                        <th class="border border-gray-300 px-4 py-2">Postal Code</th>
+                        <th class="border border-gray-300 px-4 py-2">Address</th>
+                        <th class="border border-gray-300 px-4 py-2">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($deliveryDetails as $delivery)
                         <tr class="hover:bg-gray-100">
                             <td class="border border-gray-300 px-4 py-2 text-center">{{ $delivery->id }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $delivery->name }}</td>
@@ -71,12 +66,15 @@
                                 @endif
                             </td>
                         </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
-    </div>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @else
+        <p class="text-center text-gray-500">No delivery details available.</p>
+    @endif
+</div>
+
 
     <!-- Orders Section -->
     <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-6 mt-11 mb-11">

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -27,19 +28,14 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        if ($user) {
-            $token = $user->createToken($user->email)->plainTextToken;
-
-            return response()->json([
-                'message' => 'Registration successful',
-                'token' => $token,
-                'token_type' => 'Bearer',
-            ], 201);
-        }
+        $token = $user->createToken($user->email)->plainTextToken;
 
         return response()->json([
-            'message' => 'Registration failed',
-        ], 500);
+            'message' => 'Registration successful',
+            'user' => $user,
+            'token' => $token,
+            'token_type' => 'Bearer',
+        ], 201);
     }
 
     /**
@@ -55,15 +51,14 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'message' => 'The provided credentials are incorrect.',
-            ], 401);
+            return response()->json(['message' => 'Invalid credentials.'], 401);
         }
 
         $token = $user->createToken($user->email . '-auth-token')->plainTextToken;
 
         return response()->json([
             'message' => 'Login successful',
+            'user' => $user,
             'token' => $token,
             'token_type' => 'Bearer',
         ], 200);
@@ -74,6 +69,9 @@ class AuthController extends Controller
      */
     public function logout(Request $request): JsonResponse
     {
+
+        \Log::info('Logout method called by user:', ['user_id' => $request->user()->id]);
+
         $request->user()->tokens()->delete();
 
         return response()->json([
@@ -82,13 +80,44 @@ class AuthController extends Controller
     }
 
     /**
-     * Fetch the authenticated user's profile.
+     * Get the authenticated user.
      */
-    public function profile(Request $request): JsonResponse
-    {
+    public function profile(Request $request)
+{
+    $token = $request->header('Authorization');
+
+    if (!$token) {
         return response()->json([
-            'message' => 'Profile retrieved successfully',
-            'data' => $request->user(),
-        ], 200);
+            'status' => false,
+            'message' => 'Token not provided',
+        ], 401);
     }
+
+    $token = str_replace('Bearer ', '', $token);
+    $user = \App\Models\User::whereHas('tokens', function ($query) use ($token) {
+        $query->where('token', hash('sha256', $token));
+    })->first();
+
+    if (!$user) {
+        return response()->json([
+            'status' => false,
+            'message' => 'User not found',
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => true,
+        'message' => 'User profile retrieved successfully',
+        'data' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+        ],
+    ], 200);
+}
+
+
+
+    
 }

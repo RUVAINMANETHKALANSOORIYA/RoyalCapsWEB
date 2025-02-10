@@ -27,41 +27,53 @@
         </div>
 
         <!-- Product Details -->
-        <div>
-            <h1 class="text-3xl font-bold">{{ $product->name }}</h1>
-            <p class="text-gray-600 mt-2">{{ $product->description }}</p>
-            <p class="text-blue-600 font-bold text-2xl mt-4">LKR {{ number_format($product->price, 2) }}</p>
+        <!-- Product Details -->
+<div>
+    <h1 class="text-3xl font-bold">{{ $product->name }}</h1>
+    <p class="text-gray-600 mt-2">{{ $product->description }}</p>
+    <p class="text-blue-600 font-bold text-2xl mt-4">LKR {{ number_format($product->price, 2) }}</p>
 
-            <p class="text-gray-700 mt-2">Color: <span class="font-semibold">{{ $product->color }}</span></p>
-            <p class="text-gray-700 mt-2">Stock: <span id="stock-count" class="font-semibold">{{ $product->stock }}</span></p>
+    <p class="text-gray-700 mt-2">Color: <span class="font-semibold">{{ $product->color }}</span></p>
+    <p class="text-gray-700 mt-2">Stock: <span id="stock-count" class="font-semibold">{{ $product->stock }}</span></p>
 
-            <!-- Quantity Selector -->
-            {{-- <div class="mt-4 flex items-center">
-                <label class="text-gray-700 font-semibold mr-2">Quantity:</label>
-                <button type="button" id="decreaseQty" class="bg-gray-300 px-3 py-1 rounded-l text-gray-700 hover:bg-gray-400">-</button>
-                <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ $product->stock }}" 
-                       class="w-16 text-center border border-gray-300 py-1">
-                <button type="button" id="increaseQty" class="bg-gray-300 px-3 py-1 rounded-r text-gray-700 hover:bg-gray-400">+</button>
-            </div> --}}
+    <!-- Quantity Selector -->
+    {{-- <div class="mt-4 flex items-center">
+        <label class="text-gray-700 font-semibold mr-2">Quantity:</label>
+        <button type="button" id="decreaseQty" class="bg-gray-300 px-3 py-1 rounded-l text-gray-700 hover:bg-gray-400">-</button>
+        <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ $product->stock }}" 
+               class="w-16 text-center border border-gray-300 py-1">
+        <button type="button" id="increaseQty" class="bg-gray-300 px-3 py-1 rounded-r text-gray-700 hover:bg-gray-400">+</button>
+    </div> --}}
 
-            <!-- Add to Cart Button -->
-            <form action="{{ route('cart.add', ['id' => $product->id]) }}" method="POST">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <input type="hidden" name="price" value="{{ $product->price }}">
-                <input type="hidden" name="color" value="{{ $product->color }}">
+    <!-- Add to Cart Button -->
+    @auth
+        <!-- If User is Logged In -->
+        <form action="{{ route('cart.add', ['id' => $product->id]) }}" method="POST">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+            <input type="hidden" name="price" value="{{ $product->price }}">
+            <input type="hidden" name="color" value="{{ $product->color }}">
+        
+            <!-- Quantity Input -->
+            <label for="quantity" class="block text-gray-700 font-semibold">Quantity:</label>
+            <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stock }}" 
+                class="border border-gray-300 rounded-lg p-2 w-24">
             
-                <!-- Quantity Input -->
-                <label for="quantity" class="block text-gray-700 font-semibold">Quantity:a</label>
-                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stock }}" 
-                    class="border border-gray-300 rounded-lg p-2 w-24">
-                
-                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg shadow-md hover:bg-blue-700 mt-3">
-                    Add to Cart
-                </button>
-            </form>
-        </div>
-    </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg shadow-md hover:bg-blue-700 mt-3">
+                Add to Cart
+            </button>
+        </form>
+    @else
+        <!-- If User is NOT Logged In -->
+        <a href="{{ route('login') }}" class="w-full bg-red-600 text-white py-2 rounded-lg shadow-md hover:bg-red-700 mt-3 block text-center">
+            Login to Add to Cart
+        </a>
+    @endauth
+</div>
+
+</div>
+
+
 </div>
 
 <script>
