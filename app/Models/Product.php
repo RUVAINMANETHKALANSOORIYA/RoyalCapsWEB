@@ -32,7 +32,7 @@ class Product extends Model
 
     // Cast product_images to array
 protected $casts = [
-    'product_images' => 'array',
+    'product_image' => 'array',
 ];
 
     // Relationship: A product belongs to a user

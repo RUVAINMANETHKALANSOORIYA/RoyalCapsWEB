@@ -10,11 +10,11 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-100 text-gray-800 ">
 
 @include('layouts.navigation')
 
-<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md min-h-screen">
     <h1 class="text-3xl font-bold text-center mb-6">Shopping Cart</h1>
 
     @if(session('success'))

@@ -25,10 +25,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // Debug: Log Request Data
-        \Log::info('Product Store Request:', $request->all());
-
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
@@ -39,26 +36,39 @@ class ProductController extends Controller
         ]);
 
         // Handle Multiple Image Uploads
-        $imageNames = [];
-        if ($request->hasFile('product_images')) {
-            foreach ($request->file('product_images') as $image) {
+        // $imageNames = [];
+        // if ($request->hasFile('product_image')) {
+        //     foreach ($request->file('product_image') as $image) {
+        //         $imageName = time() . '-' . $image->getClientOriginalName();
+        //         $image->move(public_path('uploads'), $imageName);
+        //         $imageNames[] = $imageName;
+        //     }
+        // }
+
+        if ($request->hasFile('product_image')) {
+            $imageNames = [];
+            foreach ($request->file('product_image') as $image) {
                 $imageName = time() . '-' . $image->getClientOriginalName();
                 $image->move(public_path('uploads'), $imageName);
                 $imageNames[] = $imageName;
             }
+            $validatedData['product_image'] = json_encode($imageNames);
         }
 
+
         // Create the Product
-        $product = Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'category' => $request->category,
-            'color' => $request->color,
-            'product_image' => json_encode($imageNames), // Store images as JSON
-            'user_id' => Auth::id(),
-        ]);
+        // $product = Product::create([
+        //     'name' => $request->name,
+        //     'description' => $request->description,
+        //     'price' => $request->price,
+        //     'stock' => $request->stock,
+        //     'category' => $request->category,
+        //     'color' => $request->color,
+        //     'product_image' => json_encode($imageNames), // Store images as JSON
+        //     'user_id' => Auth::id(),
+        // ]);
+
+        $product = Product::create(array_merge($validatedData, ['user_id' => Auth::id()]));
 
         \Log::info('Product Created:', $product->toArray());
 

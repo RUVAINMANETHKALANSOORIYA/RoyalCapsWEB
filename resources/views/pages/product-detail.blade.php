@@ -14,14 +14,14 @@
 
 @include('layouts.navigation')
 
-<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md min-h-screen">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Product Image -->
         <div>
-            @if ($product->product_images)
-                @php $images = json_decode($product->product_images, true); @endphp
+            @if ($product->product_image)
+                @php $images = json_decode($product->product_image, true); @endphp
                 @if (!empty($images))
-                    <img src="{{ asset('images/products/' . $images[0]) }}" alt="{{ $product->name }}" class="w-full h-96 object-cover rounded-lg shadow">
+                    <img src="{{ asset('/uploads/' . $images[0]) }}" alt="{{ $product->name }}" class="w-full h-96 object-cover rounded-lg shadow">
                 @endif
             @endif
         </div>

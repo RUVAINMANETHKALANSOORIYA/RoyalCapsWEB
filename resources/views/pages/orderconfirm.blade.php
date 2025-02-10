@@ -7,7 +7,7 @@
 
 @include('layouts.navigation')
 
-<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md text-center">
+<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md text-center min-h-screen">
     <h1 class="text-3xl font-bold text-green-600 mb-6">Thank You!</h1>
     <p class="text-lg text-gray-700">
         {{ session('success') ?? "Your delivery details have been saved successfully!" }}

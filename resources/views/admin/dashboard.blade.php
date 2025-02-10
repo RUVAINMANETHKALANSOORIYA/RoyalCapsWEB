@@ -174,7 +174,7 @@
     </div>
 
     <!-- Orders List -->
-    <div class="bg-white rounded shadow p-6 mb-8 max-w-6xl mx-auto">
+    {{-- <div class="bg-white rounded shadow p-6 mb-8 max-w-6xl mx-auto">
         <h3 class="text-2xl font-semibold mb-4 text-center">Orders List</h3>
         @if ($orders->isEmpty())
             <p class="text-center text-gray-500">No orders available.</p>
@@ -226,14 +226,14 @@
                 </table>
             </div>
         @endif
-    </div>
+    </div> --}}
 
 
     <!-- Product Form -->
     <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 mt-6">
         <h2 class="text-2xl font-semibold mb-6 text-center">Add New Product</h2>
 
-        <form action="{{ route('products.store') }}" method="POST">
+        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <!-- Product Name -->
@@ -289,9 +289,9 @@
 
             <!-- Product Images (Multiple Uploads) -->
             <div class="mb-4">
-                <label for="product_images" class="block text-gray-700 font-semibold mb-2">Upload Product
+                <label for="product_image" class="block text-gray-700 font-semibold mb-2">Upload Product
                     Images</label>
-                <input type="file" name="product_images[]" id="product_images" multiple
+                <input type="file" name="product_image[]" id="product_image" multiple
                     class="w-full border border-gray-300 rounded-lg shadow-sm p-2">
                 <p class="text-sm text-gray-500">You can upload multiple images (JPEG, PNG, JPG, GIF).</p>
             </div>
@@ -404,6 +404,14 @@
                         <option value="Women">Women</option>
                     </select>
                 </div>
+
+                   <!-- Product Image -->
+            <div class="mb-4">
+                <label for="edit_image" class="block text-gray-700 font-semibold">Update Product Image</label>
+                <input type="file" name="product_image" id="edit_image" 
+                    class="w-full border border-gray-300 rounded-lg shadow-sm p-2">
+                <p class="text-sm text-gray-500">Leave this blank if you don't want to update the image.</p>
+            </div>
 
                 <!-- Submit Button -->
                 <div class="flex justify-between">

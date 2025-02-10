@@ -16,7 +16,7 @@
 
 @include('layouts.navigation')
 
-<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md min-h-screen">
     <h1 class="text-3xl font-bold text-center mb-6">Checkout</h1>
 
     <!-- Order Summary -->
